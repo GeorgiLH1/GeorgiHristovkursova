@@ -1,0 +1,73 @@
+import javax.swing.*;
+import java.awt.*;
+import java.util.Random;
+
+class SortVisualizerPanel extends JPanel {
+    private int[] array;
+    private int arraySize = 50;
+    private final int WIDTH = 800;
+    private final int HEIGHT = 500;
+    private final int BAR_WIDTH = WIDTH / arraySize;
+
+    public SortVisualizerPanel() {
+        this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        this.setBackground(Color.BLACK);
+        generateArray();
+    }
+
+    public void generateArray() {
+        array = new int[arraySize];
+        Random rand = new Random();
+        for (int i = 0; i < arraySize; i++) {
+            array[i] = rand.nextInt(HEIGHT - 50) + 10;
+        }
+        repaint();
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
+
+        for (int i = 0; i < arraySize; i++) {
+            g2d.setColor(Color.CYAN);
+            g2d.fillRect(i * BAR_WIDTH, HEIGHT - array[i], BAR_WIDTH - 2, array[i]);
+        }
+    }
+
+    public void startShellSort() {
+        new Thread(() -> {
+            shellSort();
+        }).start();
+    }
+
+    private void shellSort() {
+        int n = array.length;
+
+        for (int gap = n / 2; gap > 0; gap /= 2) {
+            for (int i = gap; i < n; i++) {
+                int temp = array[i];
+                int j;
+
+                for (j = i; j >= gap && array[j - gap] > temp; j -= gap) {
+                    array[j] = array[j - gap];
+
+                    repaint();
+                    sleep(20);
+                }
+                array[j] = temp;
+
+                repaint();
+                sleep(20);
+            }
+        }
+    }
+
+    private void sleep(int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
