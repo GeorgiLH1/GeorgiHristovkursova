@@ -1,0 +1,19 @@
+import javax.swing.*;
+
+public class VisualizerApp {
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Shell Sort Dynamic Visualization");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        SortVisualizerPanel panel = new SortVisualizerPanel();
+        frame.add(panel);
+
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+
+        // Стартиране на сортирането 1 секунда след пускане
+        try { Thread.sleep(1000); } catch (Exception e) {}
+        panel.startShellSort();
+    }
+}
